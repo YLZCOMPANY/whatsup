@@ -1,47 +1,248 @@
 <!doctype html>
-<html lang="fa">
+<html lang="fa" dir="rtl" class="h-full">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>گروه صنعتی YLZ Company</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کاتالوگ آینه‌های خودرو</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600&display=swap');
     body {
-      font-family: 'Vazirmatn', sans-serif;
-      background-color: #fff;
-      color: #333;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      margin: 0;
+      box-sizing: border-box;
     }
-    h1 {
-      color: #D4AF37;
-      font-size: 1.8rem;
-      margin-bottom: 40px;
-      text-align: center;
+
+    .mirror-card {
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-    .btn {
-      background-color: #D4AF37;
-      color: white;
-      padding: 15px 25px;
-      border-radius: 10px;
-      text-decoration: none;
-      font-weight: 600;
-      transition: background 0.3s, transform 0.2s;
+
+    .mirror-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.3);
     }
-    .btn:hover {
-      background-color: #c49a2a;
-      transform: translateY(-2px);
+
+    .filter-btn {
+      transition: all 0.3s;
+    }
+
+    .favorite-icon {
+      transition: transform 0.2s;
+    }
+
+    .favorite-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .gold-shine {
+      background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%);
+      background-size: 200% 200%;
+      animation: shine 3s ease infinite;
+    }
+
+    @keyframes shine {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
   </style>
 </head>
-<body>
-  <h1>گروه صنعتی YLZ Company</h1>
-  <a class="btn" href="https://wa.me/989103012969?text=👋%20سلام%20و%20خوش%20آمدید%20به%20گروه%20صنعتی%20YLZ%20Company%0Aما%20اینجاییم%20تا%20بهتون%20کمک%20کنیم%20بهترین%20آپشن‌های%20خودرو%20را%20با%20بهترین%20کیفیت%20انتخاب%20کنید%20🚗✨%0Aلطفاً%20نام%20خودتون%20و%20مدل%20خودروتون%20رو%20بفرمایید%20تا%20مشاوران%20تخصصی%20ما%20راهنماییتون%20کنن%20😌" target="_blank" rel="noopener">
-    چت با گروه صنعتی YLZ Company
-  </a>
+<body class="h-full">
+  <div id="app" class="h-full w-full overflow-auto"></div>
+
+  <script>
+    const defaultConfig = {
+      background_color: "#1a1a1a",
+      card_color: "#2d2d2d",
+      text_color: "#f5f5f5",
+      primary_action_color: "#d4af37",
+      secondary_action_color: "#ffd700",
+      font_family: "Vazirmatn",
+      font_size: 16,
+      catalog_title: "کاتالوگ آینه‌های خودرو",
+      filter_label: "دسته‌بندی",
+      favorite_label: "علاقه‌مندی‌ها",
+      footer_text: "تولید و طراحی توسط شرکت YLZ"
+    };
+
+    const referenceMirrors = [
+      {
+        id: "JACJ4",
+        name: "JACJ4",
+        category: "تاشو",
+        carModel: "JAC J4",
+        description: "آینه تاشو برقی مناسب برای خودروی JAC J4",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/ayneyj4/main/آینه%20J4.png"
+      },
+      {
+        id: "KMCT8",
+        name: "KMCT8",
+        category: "برقی",
+        carModel: "KMC T8",
+        description: "آینه برقی با قابلیت تنظیم از داخل خودرو",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/ayne-kmct8/main/t8.png"
+      },
+      {
+        id: "SAINA-QUIK",
+        name: "SAINA/QUIK",
+        category: "خودرو",
+        carModel: "Saina / Quick",
+        description: "آینه استاندارد مناسب برای ساینا و کوییک",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/sainaquikk/main/aynej4.png"
+      },
+      {
+        id: "CERATO",
+        name: "CERATO",
+        category: "برقی",
+        carModel: "Kia Cerato",
+        description: "آینه برقی تاشو مدل سراتو",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/cerato/main/آینه%20سراتو.png"
+      },
+      {
+        id: "BRILLIANCE",
+        name: "BRILLIANCE",
+        category: "تاشو",
+        carModel: "Brilliance",
+        description: "آینه تاشو برقی برلیانس با کیفیت بالا",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/aynekhodro-breliance/main/آیینه%20برلیانس.png"
+      },
+      {
+        id: "JACS3",
+        name: "JACS3",
+        category: "خودرو",
+        carModel: "JAC S3",
+        description: "آینه خودرو استاندارد JAC S3",
+        imageUrl: "https://raw.githubusercontent.com/YLZCOMPANY/jacs3/main/آینه%20S3.png"
+      }
+    ];
+
+    let currentFilter = "همه";
+    let searchQuery = "";
+    let favorites = JSON.parse(localStorage.getItem("favorites") || "{}");
+
+    function saveFavorites() {
+      localStorage.setItem("favorites", JSON.stringify(favorites));
+    }
+
+    function toggleFavorite(id) {
+      favorites[id] = !favorites[id];
+      saveFavorites();
+      renderApp();
+    }
+
+    function renderApp() {
+      const config = defaultConfig;
+      const app = document.getElementById("app");
+
+      const categories = ["همه", "تاشو", "برقی", "خودرو"];
+      const backgroundColor = config.background_color;
+      const cardColor = config.card_color;
+      const textColor = config.text_color;
+      const primaryColor = config.primary_action_color;
+      const secondaryColor = config.secondary_action_color;
+      const baseSize = config.font_size;
+      const customFont = config.font_family;
+      const baseFontStack = "Tahoma, Arial, sans-serif";
+
+      const filteredMirrors = referenceMirrors.filter(mirror => {
+        const matchesFilter = currentFilter === "همه" || mirror.category === currentFilter;
+        const matchesSearch = searchQuery === "" ||
+          mirror.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          mirror.carModel.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesFilter && matchesSearch;
+      });
+
+      const favoriteCount = Object.values(favorites).filter(Boolean).length;
+
+      app.innerHTML = `
+        <div style="background-color: ${backgroundColor}; color: ${textColor}; font-family: ${customFont}, ${baseFontStack}; min-height: 100vh; padding: 2rem;">
+          <div style="max-width: 80rem; margin: 0 auto;">
+            <div style="text-align: center; margin-bottom: 2rem;">
+              <h1 style="font-size: ${baseSize * 2}px; color: ${primaryColor}; font-weight: 700;">🪞 ${config.catalog_title}</h1>
+              <p style="opacity: 0.7;">${referenceMirrors.length} مدل آینه</p>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+              <input type="text" id="searchInput" placeholder="جست‌وجو..." 
+                value="${searchQuery}"
+                style="width: 100%; padding: 1rem; border-radius: 0.5rem; border: 2px solid ${primaryColor};
+                       background-color: ${cardColor}; color: ${textColor}; font-size: ${baseSize}px;">
+            </div>
+
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.5rem;">
+              ${categories.map(cat => `
+                <button class="filter-btn" data-category="${cat}"
+                  style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 2px solid ${primaryColor};
+                         background-color: ${currentFilter === cat ? primaryColor : 'transparent'};
+                         color: ${currentFilter === cat ? backgroundColor : primaryColor};
+                         font-weight: 600; cursor: pointer;">
+                  ${cat}
+                </button>
+              `).join("")}
+              <button id="favoritesFilter"
+                style="padding: 0.5rem 1.25rem; border-radius: 9999px; border: 2px solid ${secondaryColor};
+                       background-color: ${currentFilter === 'favorites' ? secondaryColor : 'transparent'};
+                       color: ${currentFilter === 'favorites' ? backgroundColor : secondaryColor};
+                       font-weight: 600; cursor: pointer;">
+                ❤️ ${config.favorite_label} (${favoriteCount})
+              </button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+              ${filteredMirrors.map(mirror => {
+                const isFavorite = favorites[mirror.id];
+                return `
+                  <div class="mirror-card" style="background-color: ${cardColor}; border-radius: 0.75rem; overflow: hidden;
+                      border: 2px solid ${isFavorite ? secondaryColor : primaryColor}40;">
+                    <div style="background: linear-gradient(135deg, ${primaryColor}20, ${secondaryColor}20);
+                        height: 180px; display: flex; align-items: center; justify-content: center; position: relative;">
+                      <img src="${mirror.imageUrl}" alt="${mirror.name}" 
+                           style="max-height: 100%; max-width: 100%; object-fit: contain; padding: 0.5rem;">
+                      <button class="favorite-icon" data-id="${mirror.id}"
+                        style="position: absolute; top: 0.75rem; left: 0.75rem;
+                               background-color: ${cardColor}; border: 2px solid ${primaryColor};
+                               border-radius: 50%; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center;">
+                        ${isFavorite ? "❤️" : "🤍"}
+                      </button>
+                    </div>
+                    <div style="padding: 1rem;">
+                      <h3 style="font-size: ${baseSize * 1.25}px; color: ${primaryColor}; font-weight: 700;">${mirror.name}</h3>
+                      <p style="opacity: 0.8;">🚗 ${mirror.carModel}</p>
+                      <p style="opacity: 0.7;">${mirror.description}</p>
+                      <p style="margin-top: 1rem; font-size: ${baseSize * 0.8}px; color: ${primaryColor}; text-align: center;">
+                        ✨ ${config.footer_text} ✨
+                      </p>
+                    </div>
+                  </div>
+                `;
+              }).join("")}
+            </div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById("searchInput").addEventListener("input", e => {
+        searchQuery = e.target.value;
+        renderApp();
+      });
+
+      document.querySelectorAll(".filter-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentFilter = btn.dataset.category;
+          renderApp();
+        });
+      });
+
+      document.getElementById("favoritesFilter").addEventListener("click", () => {
+        currentFilter = currentFilter === "favorites" ? "همه" : "favorites";
+        if (currentFilter === "favorites") {
+          referenceMirrors.splice(0, referenceMirrors.length, ...referenceMirrors.filter(m => favorites[m.id]));
+        }
+        renderApp();
+      });
+
+      document.querySelectorAll(".favorite-icon").forEach(btn => {
+        btn.addEventListener("click", () => toggleFavorite(btn.dataset.id));
+      });
+    }
+
+    renderApp();
+  </script>
 </body>
 </html>
